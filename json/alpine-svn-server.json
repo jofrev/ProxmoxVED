@@ -40,6 +40,10 @@
     {
       "type": "info",
       "text": "Access repositories via `svn://<IP>:3690/<name>`."
+    },
+    {
+      "type": "info",
+      "text": "To enable authenticated commits, edit `/srv/svn/<name>/conf/svnserve.conf` (set `anon-access = read`, `auth-access = write`, `password-db = passwd`) and add users to `/srv/svn/<name>/conf/passwd`."
     }
   ]
 }
