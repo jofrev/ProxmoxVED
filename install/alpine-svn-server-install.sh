@@ -20,7 +20,9 @@ msg_ok "Installed SVN Server"
 msg_info "Configuring svnserve"
 mkdir -p /srv/svn
 cat <<EOF >/etc/conf.d/svnserve
-SVNSERVE_OPTS="--root /srv/svn"
+SVNSERVE_OPTS="--root=/srv/svn"
+SVNSERVE_USER="root"
+SVNSERVE_GROUP="root"
 EOF
 $STD rc-update add svnserve default
 $STD rc-service svnserve start
