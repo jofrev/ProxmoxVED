@@ -5,7 +5,7 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 # License: MIT | https://github.com/community-scripts/ProxmoxVED/raw/main/LICENSE
 # Source: https://subversion.apache.org/
 
-APP="SVN-Server"
+APP="SVN-Web"
 var_tags="${var_tags:-versioncontrol}"
 var_cpu="${var_cpu:-1}"
 var_ram="${var_ram:-512}"
@@ -24,20 +24,17 @@ function update_script() {
   header_info
   check_container_storage
   check_container_resources
-
-  if [[ ! -f /usr/bin/svnserve ]]; then
+  if [[ ! -f /etc/apache2/conf-available/svn.conf ]]; then
     msg_error "No ${APP} Installation Found!"
     exit
   fi
-
   msg_info "Updating ${APP}"
   $STD apt update
   $STD apt upgrade -y
   msg_ok "Updated ${APP}"
-
-  msg_info "Restarting ${APP}"
-  $STD systemctl restart svnserve
-  msg_ok "Restarted ${APP}"
+  msg_info "Restarting Apache"
+  systemctl restart apache2
+  msg_ok "Restarted Apache"
   msg_ok "Updated successfully!"
   exit
 }
@@ -48,7 +45,11 @@ description
 
 msg_ok "Completed successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} svnserve is listening on:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}svn://${IP}:3690${CL}"
-echo -e "${INFO}${YW} Create your first repository with:${CL}"
+echo -e "${INFO}${YW} Browse repositories at:${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}http://${IP}/svn${CL}"
+echo -e "${INFO}${YW} Add a commit user with:${CL}"
+echo -e "${TAB}${BGN}htpasswd /etc/svn/passwd <username>${CL}"
+echo -e "${INFO}${YW} Create a repository with:${CL}"
 echo -e "${TAB}${BGN}svnadmin create /srv/svn/<name>${CL}"
+echo -e "${INFO}${YW} Then set ownership so Apache can write to it:${CL}"
+echo -e "${TAB}${BGN}chown -R www-data:www-data /srv/svn/<name>${CL}"

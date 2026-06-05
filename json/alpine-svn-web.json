@@ -1,0 +1,53 @@
+{
+  "name": "Alpine-SVN-Web",
+  "slug": "alpine-svn-web",
+  "categories": [
+    20
+  ],
+  "date_created": "2026-06-05",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "has_arm": false,
+  "interface_port": 80,
+  "documentation": "https://svnbook.red-bean.com/",
+  "website": "https://subversion.apache.org/",
+  "logo": "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/apache-subversion.webp",
+  "config_path": "/etc/apache2/conf.d/svn.conf",
+  "description": "Apache Subversion (SVN) is an open-source version control system that manages files and directories, and the changes made to them, over time. This lightweight Alpine-based container serves SVN repositories over HTTP via Apache mod_dav_svn, providing both web browsing and WebDAV checkout access.",
+  "install_methods": [
+    {
+      "type": "alpine",
+      "script": "ct/alpine-svn-web.sh",
+      "resources": {
+        "cpu": 1,
+        "ram": 256,
+        "hdd": 4,
+        "os": "alpine",
+        "version": "3.23"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": null,
+    "password": null
+  },
+  "notes": [
+    {
+      "type": "info",
+      "text": "Browse all repositories at `http://<IP>/svn`."
+    },
+    {
+      "type": "info",
+      "text": "Create a repository with `svnadmin create /srv/svn/<name>`, then run `chown -R apache:apache /srv/svn/<name>`."
+    },
+    {
+      "type": "info",
+      "text": "Add a commit user with `htpasswd /etc/svn/passwd <username>`."
+    },
+    {
+      "type": "info",
+      "text": "Repositories are anonymously readable. Write access requires a valid user in `/etc/svn/passwd`."
+    }
+  ]
+}
